@@ -1,0 +1,33 @@
+# Virtual environment
+venv/
+env/
+.env/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# IDE / editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# NLTK downloaded data (large, re-downloadable)
+nltk_data/
+
+# Environment variables
+.env
+
+# Logs
+*.log

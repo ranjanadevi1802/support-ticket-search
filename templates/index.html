@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Support Ticket Search</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,300;9..144,600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0d0e12;
+    --surface: #14161c;
+    --border: #2a2d38;
+    --accent: #e8ff47;
+    --accent2: #47c9ff;
+    --text: #e2e4ef;
+    --muted: #656880;
+    --card-bg: #1a1d27;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 6rem;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: .5rem;
+  }
+
+  .logo-icon {
+    width: 38px; height: 38px;
+    border: 2px solid var(--accent);
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .logo-icon svg { width: 20px; height: 20px; fill: var(--accent); }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -.02em;
+  }
+
+  .tagline {
+    color: var(--muted);
+    font-size: .78rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .search-wrap { position: relative; margin-bottom: 1rem; }
+
+  textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: .88rem;
+    line-height: 1.7;
+    padding: 1.1rem 1.2rem;
+    resize: vertical;
+    min-height: 110px;
+    transition: border-color .2s;
+    outline: none;
+  }
+
+  textarea:focus { border-color: var(--accent); }
+  textarea::placeholder { color: var(--muted); }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .top-k-wrap {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    color: var(--muted);
+    font-size: .78rem;
+  }
+
+  .top-k-wrap select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: .82rem;
+    padding: .3rem .6rem;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .btn {
+    margin-left: auto;
+    background: var(--accent);
+    color: #0d0e12;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    padding: .7rem 1.6rem;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+  }
+
+  .btn:hover { opacity: .88; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .spinner {
+    display: none;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,.15);
+    border-top-color: var(--accent2);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    margin-left: auto;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #results { margin-top: 2.5rem; }
+
+  .section-label {
+    font-size: .7rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+  }
+
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 580px) { .analysis-grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+  }
+
+  .panel-title {
+    font-size: .68rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: .75rem;
+  }
+
+  .token-pill {
+    display: inline-block;
+    background: rgba(232,255,71,.08);
+    border: 1px solid rgba(232,255,71,.25);
+    border-radius: 4px;
+    color: var(--accent);
+    font-size: .72rem;
+    padding: .2rem .55rem;
+    margin: .15rem .15rem .15rem 0;
+  }
+
+  .token-pill.stop {
+    background: rgba(255,255,255,.04);
+    border-color: rgba(255,255,255,.1);
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  .token-table { width: 100%; font-size: .75rem; border-collapse: collapse; }
+
+  .token-table th {
+    color: var(--muted);
+    font-weight: 400;
+    text-align: left;
+    padding-bottom: .4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .token-table td {
+    padding: .3rem 0;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    vertical-align: middle;
+  }
+
+  .token-table td:not(:first-child) { padding-left: .8rem; }
+  .arrow { color: var(--muted); font-size: .65rem; }
+
+  .match-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    animation: fadeUp .35s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .match-card-header {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    padding: .9rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,.025);
+  }
+
+  .rank-badge {
+    background: var(--accent);
+    color: #0d0e12;
+    border-radius: 4px;
+    font-size: .7rem;
+    font-weight: 700;
+    padding: .2rem .5rem;
+    flex-shrink: 0;
+  }
+
+  .ticket-id { font-size: .78rem; color: var(--accent2); }
+
+  .score-bar-wrap {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+  }
+
+  .score-val {
+    font-size: .76rem;
+    color: var(--accent);
+    min-width: 3.5rem;
+    text-align: right;
+  }
+
+  .score-track {
+    width: 80px; height: 5px;
+    background: rgba(255,255,255,.08);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .score-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 99px;
+    transition: width .5s ease;
+  }
+
+  .match-body { padding: 1rem 1.2rem; }
+
+  .desc-label, .sol-label {
+    font-size: .65rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: .4rem;
+  }
+
+  .desc-label { color: var(--muted); }
+  .sol-label  { color: var(--accent2); margin-top: 1rem; }
+  .desc-text  { font-size: .8rem; color: var(--muted); line-height: 1.7; }
+  .sol-text   { font-size: .82rem; color: var(--text); line-height: 1.75; }
+
+  .no-match {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--muted);
+    font-size: .82rem;
+  }
+
+  .no-match span { display: block; font-size: 2rem; margin-bottom: .75rem; }
+
+  .error-msg {
+    background: rgba(255,80,80,.08);
+    border: 1px solid rgba(255,80,80,.25);
+    border-radius: 8px;
+    color: #ff6b6b;
+    font-size: .82rem;
+    padding: .9rem 1rem;
+    margin-top: 1rem;
+  }
+
+  .sim-toggle {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: .72rem;
+    cursor: pointer;
+    padding: .4rem 0 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .sim-table-wrap { display: none; margin-top: .8rem; }
+  .sim-table-wrap.open { display: block; }
+
+  .sim-table { width: 100%; font-size: .74rem; border-collapse: collapse; }
+
+  .sim-table th {
+    color: var(--muted);
+    font-weight: 400;
+    text-align: right;
+    padding-bottom: .35rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sim-table th:first-child { text-align: left; }
+
+  .sim-table td {
+    padding: .28rem 0;
+    border-bottom: 1px solid rgba(255,255,255,.03);
+    text-align: right;
+  }
+
+  .sim-table td:first-child { text-align: left; color: var(--accent); }
+
+  .sim-footer {
+    margin-top: .5rem;
+    font-size: .72rem;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .sim-footer strong { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="logo-row">
+      <div class="logo-icon">
+        <svg viewBox="0 0 20 20"><path d="M2 4h16v2H2zM2 9h12v2H2zM2 14h8v2H2z"/><circle cx="16" cy="15" r="3"/><path d="M15 15h2M16 14v2" stroke="#0d0e12" stroke-width="1.2" fill="none"/></svg>
+      </div>
+      <h1>Support Ticket Search</h1>
+    </div>
+    <p class="tagline">TF-IDF &middot; Inverted Index &middot; Cosine Similarity &mdash; {{ ticket_count }} tickets indexed</p>
+  </header>
+
+  <div class="search-wrap">
+    <textarea id="queryInput" placeholder="Describe your support issue in 1–3 sentences…"></textarea>
+  </div>
+
+  <div class="controls">
+    <span class="top-k-wrap">
+      Top results:
+      <select id="topK">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3" selected>3</option>
+        <option value="5">5</option>
+      </select>
+    </span>
+    <div class="spinner" id="spinner"></div>
+    <button class="btn" id="searchBtn" onclick="runSearch()">Search &rarr;</button>
+  </div>
+
+  <div id="results"></div>
+
+</div>
+
+<script>
+async function runSearch() {
+  const query = document.getElementById('queryInput').value.trim();
+  const topK  = parseInt(document.getElementById('topK').value);
+  const btn   = document.getElementById('searchBtn');
+  const spin  = document.getElementById('spinner');
+  const out   = document.getElementById('results');
+
+  if (!query) { out.innerHTML = ''; return; }
+
+  btn.disabled = true;
+  spin.style.display = 'block';
+  out.innerHTML = '';
+
+  try {
+    const resp = await fetch('/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, top_k: topK })
+    });
+    const data = await resp.json();
+    render(data);
+  } catch(e) {
+    out.innerHTML = `<div class="error-msg">Request failed: ${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    spin.style.display = 'none';
+  }
+}
+
+function render(data) {
+  const out = document.getElementById('results');
+
+  if (data.error) {
+    out.innerHTML = `<div class="error-msg">${data.error}</div>`;
+    return;
+  }
+
+  const { analysis, results } = data;
+  let html = '';
+
+  // Query Analysis panels
+  html += `<p class="section-label">Query Analysis</p>`;
+  html += `<div class="analysis-grid">`;
+
+  html += `<div class="panel"><p class="panel-title">Token Processing</p>`;
+  analysis.all_tokens.forEach(t => {
+    const isStop = analysis.stopped.includes(t);
+    html += `<span class="token-pill${isStop ? ' stop' : ''}">${t}</span>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="panel"><p class="panel-title">Normalisation (Lemma &rarr; Root)</p>
+    <table class="token-table">
+      <thead><tr><th>Original</th><th>Lemma</th><th>Root</th></tr></thead><tbody>`;
+  analysis.triples.forEach(([orig, lemma, root]) => {
+    html += `<tr>
+      <td>${orig}</td>
+      <td><span class="arrow">→</span> ${lemma}</td>
+      <td><span class="arrow">→</span> <span style="color:var(--accent)">${root}</span></td>
+    </tr>`;
+  });
+  html += `</tbody></table></div></div>`;
+
+  // Results
+  html += `<p class="section-label">Best Matches</p>`;
+
+  if (!results || results.length === 0) {
+    html += `<div class="no-match"><span>🔍</span>No matching tickets found. Try rephrasing with more specific technical terms.</div>`;
+    out.innerHTML = html;
+    return;
+  }
+
+  results.forEach((r, i) => {
+    const pct = Math.round(r.score * 100);
+    html += `
+    <div class="match-card" style="animation-delay:${i * 0.07}s">
+      <div class="match-card-header">
+        <span class="rank-badge">#${r.rank}</span>
+        <span class="ticket-id">${r.ticket_id}</span>
+        <div class="score-bar-wrap">
+          <span class="score-val">${(r.score * 100).toFixed(1)}%</span>
+          <div class="score-track"><div class="score-fill" style="width:${pct}%"></div></div>
+        </div>
+      </div>
+      <div class="match-body">
+        <p class="desc-label">Issue Description</p>
+        <p class="desc-text">${escHtml(r.description)}</p>
+        <p class="sol-label">Recommended Solution</p>
+        <p class="sol-text">${escHtml(r.solution)}</p>`;
+
+    if (r.sim_rows && r.sim_rows.length) {
+      html += `<button class="sim-toggle" onclick="toggleSim(this)">Show similarity details</button>
+      <div class="sim-table-wrap">
+        <table class="sim-table">
+          <thead><tr><th>Root</th><th>Query TF-IDF</th><th>Doc TF-IDF</th></tr></thead><tbody>`;
+      r.sim_rows.forEach(row => {
+        html += `<tr><td>${row.token}</td><td>${row.q.toFixed(4)}</td><td>${row.d.toFixed(4)}</td></tr>`;
+      });
+      html += `</tbody></table>
+        <p class="sim-footer">Cosine similarity = <strong>${r.score.toFixed(4)}</strong></p>
+      </div>`;
+    }
+
+    html += `</div></div>`;
+  });
+
+  out.innerHTML = html;
+}
+
+function toggleSim(btn) {
+  const wrap = btn.nextElementSibling;
+  wrap.classList.toggle('open');
+  btn.textContent = wrap.classList.contains('open') ? 'Hide similarity details' : 'Show similarity details';
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+document.getElementById('queryInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.ctrlKey) runSearch();
+});
+</script>
+</body>
+</html>
