@@ -121,5 +121,16 @@ T001|Description of the issue|Solution steps
 ---
 
 ## Author
-Ranja  
-Assignment 2 — Flask Implementation and GitHub Submission
+Ranjana Devi K  
+Roll No: 2303121031
+Department: Information Science and Engineering
+
+## Project
+Support Ticket Search — Flask Web Application
+
+## Team Members
+- Ranjana Devi K (Roll No: 2303121031)
+- Ranjini R (Roll No: 2303121034)
+- Subasri A(Roll No: 2303121041)
+- Suvedha K(Roll No: 2303121043)
+- Vaitheeshwari K(Roll No: 2303121045)
