@@ -95,9 +95,6 @@ https://support-ticket-search.onrender.com
 ```
 
 Type a support issue description into the search box and press **Search** (or `Ctrl+Enter`). The system will display ranked matching tickets with similarity scores and solution recommendations.
-```
-
-Type a support issue description into the search box and press **Search** (or `Ctrl+Enter`). The system will display ranked matching tickets with similarity scores and solution recommendations.
 
 ---
 
