@@ -118,16 +118,16 @@ T001|Description of the issue|Solution steps
 ## Execution Screenshots
 
 ### 1. Flask Server Running in Terminal
-![Terminal](screenshots/terminal.png)
+![Terminal](https://raw.githubusercontent.com/ranjanadevi1802/support-ticket-search/main/screenshots/terminal.png)
 
 ### 2. Application Homepage (Live)
-![Homepage](screenshots/homepage.png)
+![Homepage](https://raw.githubusercontent.com/ranjanadevi1802/support-ticket-search/main/screenshots/homepage.png)
 
 ### 3. Search Results
-![Results](screenshots/results.png)
+![Results](https://raw.githubusercontent.com/ranjanadevi1802/support-ticket-search/main/screenshots/results.png)
 
 ### 4. GitHub Commit History
-![Commits](screenshots/commits.png)
+![Commits](https://raw.githubusercontent.com/ranjanadevi1802/support-ticket-search/main/screenshots/commits.png)
 ---
 
 ## Author
