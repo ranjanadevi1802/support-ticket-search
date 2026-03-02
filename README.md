@@ -116,13 +116,18 @@ T001|Description of the issue|Solution steps
 ---
 
 ## Execution Screenshots
-*(Add screenshots here after running the application)*
 
-- Screenshot 1: Flask server running in terminal
-- Screenshot 2: Application homepage in browser
-- Screenshot 3: Search results displayed
-- Screenshot 4: GitHub repository commit history
+### 1. Flask Server Running in Terminal
+![Terminal](screenshots/terminal.png)
 
+### 2. Application Homepage (Live)
+![Homepage](screenshots/homepage.png)
+
+### 3. Search Results
+![Results](screenshots/results.png)
+
+### 4. GitHub Commit History
+![Commits](screenshots/commits.png)
 ---
 
 ## Author
