@@ -35,6 +35,11 @@ project-folder/
 ├── requirements.txt    ← Python dependencies
 ├── README.md           ← Project documentation
 ├── .gitignore          ← Files excluded from version control
+├── screenshots/        ← Execution screenshots
+│   ├── terminal.png
+│   ├── homepage.png
+│   ├── results.png
+│   └── commits.png
 └── templates/
     └── index.html      ← Main HTML template
 ```
