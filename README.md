@@ -79,13 +79,22 @@ TICKET_ID|Issue description text|Solution text
 
 ## How to Run the Application
 
+### Local Development
 ```bash
 python app.py
 ```
-
 Then open your browser and navigate to:
 ```
 http://localhost:8080
+```
+
+### Live Deployment
+The application is deployed and accessible at:
+```
+https://support-ticket-search.onrender.com
+```
+
+Type a support issue description into the search box and press **Search** (or `Ctrl+Enter`). The system will display ranked matching tickets with similarity scores and solution recommendations.
 ```
 
 Type a support issue description into the search box and press **Search** (or `Ctrl+Enter`). The system will display ranked matching tickets with similarity scores and solution recommendations.
