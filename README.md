@@ -10,6 +10,11 @@ A Flask-based web application that allows users to describe a support issue in p
 
 ---
 
+## Live Demo
+🌐 https://support-ticket-search.onrender.com
+
+---
+
 ## Tools and Technologies
 - **Python 3.x**
 - **Flask** — web framework
@@ -40,8 +45,8 @@ project-folder/
 
 **1. Clone the repository**
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-cd YOUR_REPO_NAME
+git clone https://github.com/ranjanadevi1802/support-ticket-search.git
+cd support-ticket-search
 ```
 
 **2. (Recommended) Create a virtual environment**
