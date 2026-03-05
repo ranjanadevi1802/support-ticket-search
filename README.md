@@ -1,157 +1,165 @@
+
 # Support Ticket Search System
 
-## Project Title
 Support Ticket Search System — TF-IDF + Inverted Index
-
----
-
-## Objective
 A Flask-based web application that allows users to describe a support issue in plain English and instantly find the most relevant matching ticket from a knowledge base. The system uses TF-IDF vectorisation, an inverted index for candidate retrieval, and cosine similarity for ranking — providing transparent, explainable results at every phase of the search pipeline.
 
----
 
+
+## About Me
+Author:
+Ranjana Devi K  
+Roll No: 2303121031   
+Department: Information Science and Engineering   
+
+                                             
 ## Live Demo
-🌐 https://support-ticket-search.onrender.com
+https://support-ticket-search.onrender.com
 
----
 
-## Tools and Technologies
-- **Python 3.x**
-- **Flask** — web framework
-- **scikit-learn** — TF-IDF vectorisation and cosine similarity
-- **NLTK** — tokenisation, lemmatisation, stop word removal
-- **NumPy** — vector operations
-- **Gunicorn** — production WSGI server (for deployment)
-- **HTML / CSS / JavaScript** — frontend interface
+## Features
 
----
+-Natural language search for support tickets  
+-TF-IDF vectorization for document representation  
+-Inverted index for efficient search   
+-Cosine similarity ranking  
+-Web interface using Flask  
+-Displays ranked results with similarity scores 
 
-## Project Structure
-```
-project-folder/
-├── app.py              ← Flask web server and route definitions
-├── assign.py           ← Core NLP and IR engine (TF-IDF, inverted index)
-├── tickets.txt         ← Ticket knowledge base (pipe-separated format)
-├── requirements.txt    ← Python dependencies
-├── README.md           ← Project documentation
-├── .gitignore          ← Files excluded from version control
-├── screenshots/        ← Execution screenshots
-│   ├── terminal.png
-│   ├── homepage.png
-│   ├── results.png
-│   └── commits.png
-└── templates/
-    └── index.html      ← Main HTML template
-```
+                
+## Technologies used in the project:
 
----
+Python 3.x   
+Flask — web framework  
+scikit-learn — TF-IDF vectorisation and cosine similarity  
+NLTK — tokenisation, lemmatisation, stop word removal  
+NumPy — vector operations  
+Gunicorn — production WSGI server (for deployment)  
+HTML / CSS / JavaScript — frontend interface
 
-## Installation Steps
 
-**1. Clone the repository**
-```bash
-git clone https://github.com/ranjanadevi1802/support-ticket-search.git
-cd support-ticket-search
-```
+## Installation
 
-**2. (Recommended) Create a virtual environment**
+1.Ensure Python 3.x is installed on your system.   
+2.Create a virtual environment (recommended)
+
 ```bash
 python -m venv venv
-
-# Windows
+```
+3.Activate the virtual environment  
+Windows
+```bash
 venv\Scripts\activate
-
-# macOS / Linux
+```
+Mac / Linux
+```bash
 source venv/bin/activate
 ```
-
-**3. Install dependencies**
+4.Install the required dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-**4. Ensure `tickets.txt` is present** in the same folder as `app.py`, formatted as:
-```
-TICKET_ID|Issue description text|Solution text
-```
+    
+## Run Locally
 
----
+Clone the project
 
-## How to Run the Application
-
-### Local Development
 ```bash
-python app.py
-```
-Then open your browser and navigate to:
-```
-http://localhost:8080
+  git clone https://github.com/ranjanadevi1802/support-ticket-search.git
 ```
 
-### Live Deployment
-The application is deployed and accessible at:
+Go to the project directory
+
+```bash
+ cd support-ticket-search
 ```
+
+Install dependencies
+
+```bash
+  pip install -r requirements.txt
+```
+
+Start the server
+
+```bash
+  python app.py
+```
+
+Open your browser and visit
+
+```bash
+  http://localhost:8080
+```
+
+The Support Ticket Search System interface will appear, where you can enter a query and retrieve relevant support tickets.
+## Deployment
+
+The application is deployed using Render with Gunicorn as the production server.
+
+Live deployment:
+
 https://support-ticket-search.onrender.com
-```
 
-Type a support issue description into the search box and press **Search** (or `Ctrl+Enter`). The system will display ranked matching tickets with similarity scores and solution recommendations.
 
----
+## API Reference
 
-## How It Works
+| Method | Route     | Description                                     |
+| ------ | --------- | ----------------------------------------------- |
+| GET    | `/`       | Displays the search interface                   |
+| POST   | `/search` | Accepts search query and returns ranked tickets |
 
-The search pipeline runs in four phases:
+Example request
 
-1. **Query Analysis** — tokenises the query, expands contractions, removes stop words, and applies lemmatisation + Porter stemming.
-2. **Inverted Index Lookup** — uses root tokens to retrieve candidate tickets efficiently.
-3. **Cosine Similarity Ranking** — computes TF-IDF weighted cosine similarity between the query and all candidates.
-4. **Result Display** — returns top-K ranked results with descriptions, solutions, and per-token similarity breakdowns.
+{
+ "query": "internet not working",
+ "top_k": 3
+}
 
----
+## Usage/Examples
 
-## API Endpoints
+Example ticket format in tickets.txt
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET | `/` | Renders the main search interface |
-| POST | `/search` | Accepts `{ "query": "...", "top_k": 3 }`, returns ranked results as JSON |
+T001|Internet connection not working|Restart router and check cable connections
 
----
+### Example query
+wifi not connecting
 
-## tickets.txt Format
-Each line must follow this format (no line breaks within a ticket):
-```
-T001|Description of the issue|Solution steps
-```
+The system returns the most relevant support tickets.
+## Documentation
 
----
+Project Structure
 
-## Execution Screenshots
+project-folder/   
+├── app.py              # Flask web server and route definitions  
+├── assign.py           # Core NLP and IR engine (TF-IDF, inverted index)  
+├── tickets.txt         # Ticket knowledge base (pipe-separated format)  
+├── requirements.txt    # Python dependencies  
+├── README.md           # Project documentation  
+├── .gitignore          # Files excluded from version control  
+└── templates/
+    └── index.html      # Main HTML template  
 
-### 1. Flask Server Running in Terminal
-![Terminal](https://raw.githubusercontent.com/ranjanadevi1802/support-ticket-search/main/screenshots/terminal.png)
 
-### 2. Application Homepage (Live)
+## Screenshots
+
+### 1. Application Homepage (Live)
 ![Homepage](https://raw.githubusercontent.com/ranjanadevi1802/support-ticket-search/main/screenshots/homepage.png)
 
-### 3. Search Results
+### 2. Search Results
 ![Results](https://raw.githubusercontent.com/ranjanadevi1802/support-ticket-search/main/screenshots/results.png)
 
-### 4. GitHub Commit History
-![Commits](https://raw.githubusercontent.com/ranjanadevi1802/support-ticket-search/main/screenshots/commits.png)
----
+## Authors
 
-## Author
 Ranjana Devi K  
-Roll No: 2303121031
 Department: Information Science and Engineering
 
-## Project
-Support Ticket Search — Flask Web Application
+## Support
 
-## Team Members
-- Ranjana Devi K (Roll No: 2303121031)
-- Ranjini R (Roll No: 2303121034)
-- Subasri A(Roll No: 2303121041)
-- Suvedha K(Roll No: 2303121043)
-- Vaitheeshwari K(Roll No: 2303121045)
+If you find this project useful or want to improve it, feel free to open an issue or contribute.
+
+## License
+
+This project is for educational and academic purposes.
+
